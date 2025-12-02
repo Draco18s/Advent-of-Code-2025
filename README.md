@@ -1,0 +1,15 @@
+
+C# Solution for Advent of Code 2025
+
+https://adventofcode.com/2025/
+
+*Note: AoC no longer has a global leaderboard. As such I'll be recording my times under my friend-group schema where part 2's time does not include part 1's.*
+
+```
+      --------Part 1---------   --------Part 2---------
+Day       Time    Rank  Score       Time    Rank  Score
+ 1    00:26:21      NA      -   00:24:21      NA      -
+ 
+```
+
+*Day 1: My "new" phone is still bad at day light savings time, so my alarm didn't go off. Got started about 15 minutes later...and didn't have the project pre-setup.*
