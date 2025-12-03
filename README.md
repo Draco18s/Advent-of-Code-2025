@@ -9,7 +9,8 @@ https://adventofcode.com/2025/
       --------Part 1---------   --------Part 2---------
 Day       Time    Rank  Score       Time    Rank  Score
  1    00:26:21      NA      -   00:24:21      NA      -
- 1    00:04:21      NA      -   00:06:52      NA      -
+ 2    00:04:21      NA      -   00:06:52      NA      -
+ 3    00:06:09      NA      -   00:49:58      NA      -
  
 ```
 
