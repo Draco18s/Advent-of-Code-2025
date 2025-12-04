@@ -18,7 +18,7 @@ namespace AdventofCode2025 {
 		private const string leaderboardURI = "{0}/leaderboard/private/view/{1}.json";
 		private static Dictionary<string,List<string>> conf;
 		
-		private static string puzzleNum = "3";
+		private static string puzzleNum = "4";
 
 		static void Main(string[] args) {
 			/*** DAY 1 IMPORTANT NOTE: DO THIS BEFORE STARTING ***/
