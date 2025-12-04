@@ -8,7 +8,7 @@ using System.Linq;
 using Microsoft.VisualBasic;
 
 namespace Draco18s.AoCLib {
-	public class Grid {
+	public class Grid : IEnumerable<(int x, int y, char c)> {
 		int[,] cells;
 		private int width;
 		private int height;
@@ -341,6 +341,22 @@ namespace Draco18s.AoCLib {
 			Translate(amt.x, amt.y);
 		}
 
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		public IEnumerator<(int x, int y, char c)> GetEnumerator()
+		{
+			for (int x = MinX; x < MaxX; x++)
+			{
+				for (int y = MinY; y < MaxY; y++)
+				{
+					yield return (x, y, (char)this[x, y, true, returnZero]);
+				}
+			}
+		}
+
 		public override string ToString() {
 			/*StringBuilder sb = new StringBuilder();
 			int pad = 0;
@@ -359,6 +375,7 @@ namespace Draco18s.AoCLib {
 			return sb.ToString();*/
 			return ToString("char+0");
 		}
+
 		public string ToString(string format) {
 			StringBuilder sb = new StringBuilder();
 			int pad = 0;

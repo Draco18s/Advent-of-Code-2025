@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 
 namespace Draco18s.AoCLib {
-	public class Grid3D {
+	public class Grid3D : IEnumerable<(int x, int y, int z, char c)> {
 		int[,,] cells;
 		private int width;
 		private int depth;
@@ -50,6 +50,30 @@ namespace Draco18s.AoCLib {
 		{
 			get => this[p.x, p.y, p.z, useOffset];
 			set => this[p.x, p.y, p.z, useOffset] = value;
+		}
+
+		public int this[int X, int Y, int Z, bool useOffset, EdgeHandler edges]
+		{
+			get
+			{
+				int xx = X - (useOffset ? offsetx : 0);
+				int yy = Y - (useOffset ? offsety : 0);
+				int zz = Z - (useOffset ? offsety : 0);
+				if (xx < 0 || xx >= this.Width || yy < 0 || yy >= this.Depth || zz < 0 || zz >= this.Height) return edges();
+
+				return cells[xx, yy, zz];
+			}
+			set
+			{
+				int xx = X - (useOffset ? offsetx : 0);
+				int yy = Y - (useOffset ? offsety : 0);
+				int zz = Z - (useOffset ? offsety : 0);
+				if (xx < 0 || xx >= this.Width) return;
+				if (yy < 0 || yy >= this.Depth) return;
+				if (zz < 0 || zz >= this.Height) return;
+
+				cells[xx, yy, zz] = value;
+			}
 		}
 
 		public int GetLength(int i) {
@@ -394,6 +418,25 @@ namespace Draco18s.AoCLib {
 				FloodFill(x, y - 1, z, condition, fillValue);
 				FloodFill(x, y, z + 1, condition, fillValue);
 				FloodFill(x, y, z - 1, condition, fillValue);
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		public IEnumerator<(int x, int y, int z, char c)> GetEnumerator()
+		{
+			for (int x = MinX; x < MaxX; x++)
+			{
+				for (int y = MinY; y < MaxY; y++)
+				{
+					for (int z = MinZ; z < MaxZ; z++)
+					{
+						yield return (x, y, z, (char)this[x, y, z, true, returnZero]);
+					}
+				}
 			}
 		}
 

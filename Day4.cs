@@ -10,11 +10,8 @@ namespace AdventofCode2025
 	{
 		internal static long Part1(string input)
 		{
-			string[] lines = input.Split('\n');
 			long result = 0l;
 			Grid g = new Grid(input, true);
-			//g.IncreaseGridToInclude(new Vector2(-1,-1), () => '.');
-			//g.IncreaseGridToInclude(new Vector2( 1, 1), () => '.');
 			for (int x = 0; x < g.Width; x++)
 			{
 				for (int y = 0; y < g.Height; y++)
@@ -46,7 +43,6 @@ namespace AdventofCode2025
 
 		internal static long Part2(string input)
 		{
-			string[] lines = input.Split('\n');
 			long result = 0l;
 			Grid g = new Grid(input, true);
 			bool didRemove = false;
