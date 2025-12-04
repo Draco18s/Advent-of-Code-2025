@@ -11,8 +11,10 @@ Day       Time    Rank  Score       Time    Rank  Score
  1    00:26:21      NA      -   00:24:21      NA      -
  2    00:04:21      NA      -   00:06:52      NA      -
  3    00:06:09      NA      -   00:49:58      NA      -
+ 4    00:11:53      NA      -   00:01:35      NA      -
  
 ```
 
 *Day 1: My "new" phone is still bad at day light savings time, so my alarm didn't go off. Got started about 15 minutes later...and didn't have the project pre-setup.*
 *Day 2: Still didn't start on time. Completion time estimated based on starting 1hr 6m late.*
+*Day 4: Misread `<` as `<=`*
