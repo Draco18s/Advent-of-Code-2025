@@ -23,7 +23,6 @@ namespace AdventofCode2025
 					if (CountRolls(g, x, y) < 4)
 					{
 						result++;
-						g[x, y] = 'x';
 					}
 				}
 			}
@@ -40,10 +39,6 @@ namespace AdventofCode2025
 				if (g[x, y + i, false, () => '.'] == '@') count++;
 				if (g[x + i, y + i, false, () => '.'] == '@') count++;
 				if (g[x - i, y + i, false, () => '.'] == '@') count++;
-				if (g[x + i, y, false, () => '.'] == 'x') count++;
-				if (g[x, y + i, false, () => '.'] == 'x') count++;
-				if (g[x + i, y + i, false, () => '.'] == 'x') count++;
-				if (g[x - i, y + i, false, () => '.'] == 'x') count++;
 			}
 
 			return count;
