@@ -29,11 +29,10 @@ namespace AdventofCode2025
 		private static int CountRolls(Grid g, int x, int y)
 		{
 			int count = 0;
-			for (int i = -1; i <= 1; i++)
+			for (int i = -1; i <= 1; i+=2)
 			{
-				if(i==0) continue;
-				if (g[x + i, y, false, () => '.'] == '@') count++;
-				if (g[x, y + i, false, () => '.'] == '@') count++;
+				if (g[x + i, y    , false, () => '.'] == '@') count++;
+				if (g[x    , y + i, false, () => '.'] == '@') count++;
 				if (g[x + i, y + i, false, () => '.'] == '@') count++;
 				if (g[x - i, y + i, false, () => '.'] == '@') count++;
 			}
