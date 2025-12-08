@@ -1,7 +1,7 @@
 using System;
 
 namespace Draco18s.AoCLib {
-	public struct Vector2
+	public readonly struct Vector2
 	{
 		public static readonly Vector2 ZERO = new Vector2(0, 0);
 		public static readonly Vector2 ONE = new Vector2(1, 1);
@@ -10,10 +10,10 @@ namespace Draco18s.AoCLib {
 		public static readonly Vector2 UP = new Vector2(0, -1);
 		public static readonly Vector2 DOWN = new Vector2(0, 1);
 
-		public readonly int x;
-		public readonly int y;
+		public readonly long x;
+		public readonly long y;
 		public double magnitude => Math.Sqrt(x * x + y * y);
-		public Vector2(int _x, int _y) {
+		public Vector2(long _x, long _y) {
 			x = _x;
 			y = _y;
 		}
@@ -26,12 +26,16 @@ namespace Draco18s.AoCLib {
 		public static Vector2 Parse(string val, char split)
 		{
 			string[] vals = val.Split(split);
-			return new Vector2(int.Parse(vals[0]), int.Parse(vals[1]));
+			return new Vector2(long.Parse(vals[0]), long.Parse(vals[1]));
 		}
 
-		public static Vector2 operator *(Vector2 a, int b)
+		public static Vector2 operator *(Vector2 a, long b)
 		{
 			return new Vector2(a.x * b, a.y * b);
+		}
+		public static Vector2 operator /(Vector2 a, long b)
+		{
+			return new Vector2(a.x / b, a.y / b);
 		}
 		public static Vector2 operator -(Vector2 a, Vector2 b)
 		{
@@ -49,6 +53,13 @@ namespace Draco18s.AoCLib {
 		public static bool operator !=(Vector2 a, Vector2 b)
 		{
 			return a.x != b.x || a.y != b.y;
+		}
+
+		public static double Distance(Vector2 p1, Vector2 p2)
+		{
+			double dx = p1.x - p2.x;
+			double dy = p1.y - p2.y;
+			return Math.Sqrt(dx * dx + dy * dy);
 		}
 
 		public override string ToString() {
