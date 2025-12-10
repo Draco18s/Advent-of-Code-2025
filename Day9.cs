@@ -151,7 +151,7 @@ namespace AdventofCode2025
 					Vector2 t1 = mapToTile[r1];
 					Vector2 t2 = mapToTile[r2];
 
-					long area = (Math.Abs(t1.x - t2.x) + 0) * (Math.Abs(t1.y - t2.y) + 0);
+					long area = (Math.Abs(t1.x - t2.x) + 1) * (Math.Abs(t1.y - t2.y) + 1);
 
 					if (area <= result) continue;
 					(int, int, int, int) rect = (x, y, w, h);
