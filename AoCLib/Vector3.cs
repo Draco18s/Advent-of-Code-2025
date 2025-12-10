@@ -4,10 +4,10 @@ namespace Draco18s.AoCLib
 {
 	public readonly struct Vector3
 	{
-		public readonly long x;
-		public readonly long y;
-		public readonly long z;
-		public Vector3(long _x, long _y, long _z)
+		public readonly int x;
+		public readonly int y;
+		public readonly int z;
+		public Vector3(int _x, int _y, int _z)
 		{
 			x = _x;
 			y = _y;
@@ -22,15 +22,15 @@ namespace Draco18s.AoCLib
 		public static Vector3 Parse(string val, char split)
 		{
 			string[] vals = val.Split(split);
-			return new Vector3(long.Parse(vals[0]), long.Parse(vals[1]), long.Parse(vals[2]));
+			return new Vector3(int.Parse(vals[0]), int.Parse(vals[1]), int.Parse(vals[2]));
 		}
 
-		public static Vector3 operator *(Vector3 a, long b)
+		public static Vector3 operator *(Vector3 a, int b)
 		{
 			return new Vector3(a.x * b, a.y * b, a.z * b);
 		}
 
-		public static Vector3 operator /(Vector3 a, long b)
+		public static Vector3 operator /(Vector3 a, int b)
 		{
 			return new Vector3(a.x / b, a.y / b, a.z / b);
 		}

@@ -88,14 +88,14 @@ namespace Draco18s.AoCLib {
 
 		public int this[Vector2 p, bool useOffset=true]
 		{
-			get => this[p.x,p.y,useOffset];
-			set => this[p.x,p.y,useOffset] = value;
+			get => this[(int)p.x, (int)p.y,useOffset];
+			set => this[(int)p.x, (int)p.y,useOffset] = value;
 		}
 
 		public int this[Vector2 p, bool useOffset, EdgeHandler edges]
 		{
-			get => this[p.x, p.y, useOffset, edges];
-			set => this[p.x, p.y, useOffset, edges] = value;
+			get => this[(int)p.x, (int)p.y, useOffset, edges];
+			set => this[(int)p.x, (int)p.y, useOffset, edges] = value;
 		}
 
 		public int this[int X, int Y, bool useOffset, EdgeHandler edges]
@@ -177,7 +177,7 @@ namespace Draco18s.AoCLib {
 			if(y < 0) offsety += y;
 		}
 		public void IncreaseGridBy(Vector2 amt, EdgeHandler edgeHandler) {
-			IncreaseGridBy(amt.x, amt.y, edgeHandler);
+			IncreaseGridBy((int)amt.x, (int)amt.y, edgeHandler);
 		}
 
 		///<summary>
@@ -277,11 +277,11 @@ namespace Draco18s.AoCLib {
 		}
 
 		public IEnumerable<int> GetNeighbors(Vector2 p, bool orthoOnly, bool includeSelf) {
-			return GetNeighbors(p.x, p.y, orthoOnly, includeSelf, returnZero);
+			return GetNeighbors((int)p.x, (int)p.y, orthoOnly, includeSelf, returnZero);
 		}
 
 		public IEnumerable<int> GetNeighbors(Vector2 p, bool orthoOnly, bool includeSelf, EdgeHandler edgeHandler) {
-			return GetNeighbors(p.x, p.y, orthoOnly, includeSelf, edgeHandler);
+			return GetNeighbors((int)p.x, (int)p.y, orthoOnly, includeSelf, edgeHandler);
 		}
 
 		public void Rotate(Orientation northBecomes) {
@@ -697,7 +697,7 @@ namespace Draco18s.AoCLib {
 			{
 				for (int x = MinX; x < MaxX; x++)
 				{
-					if (cells[x, y] == c)
+					if (this[x, y, true] == c)
 						return new Vector2(x, y);
 				}
 			}
