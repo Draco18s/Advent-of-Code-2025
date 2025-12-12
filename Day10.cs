@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace AdventofCode2025
 {
@@ -92,7 +93,7 @@ namespace AdventofCode2025
 
 			public readonly int[] buttonPressesToHere;
 
-			private readonly int[] maxPressesPerButton;
+			public readonly int[] maxPressesPerButton;
 
 			public MachineState parentState = null;
 
@@ -113,11 +114,7 @@ namespace AdventofCode2025
 					{
 						maxPressesPerButton[j] = jolts[i] > 0 ? Math.Min(maxPressesPerButton[j], machine.joltages[i]) : maxPressesPerButton[j];
 					}
-
-					;
 				}
-
-				;
 			}
 
 			public MachineState(Machine m, int[] b, bool[] l, MachineState pState) : this(m)
@@ -127,11 +124,23 @@ namespace AdventofCode2025
 				parentState = pState;
 			}
 
-			private MachineState(Machine m, int[] b, int[] j, MachineState pState) : this(m)
+			private MachineState(Machine m, int[] btn, int[] jlt, MachineState pState) : this(m)
 			{
-				buttonPressesToHere = b;
+				buttonPressesToHere = btn;
 				parentState = pState;
-				joltages = j;
+				joltages = jlt;
+
+				for (var j = 0; j < machine.buttons.Length; j++)
+				{
+					maxPressesPerButton[j] = int.MaxValue;
+					Button b = machine.buttons[j];
+					int[] jolts = new int[m.joltages.Length];
+					jolts = b.Press(jolts);
+					for (int i = 0; i < machine.joltages.Length; i++)
+					{
+						maxPressesPerButton[j] = jolts[i] > 0 ? Math.Min(maxPressesPerButton[j], machine.joltages[i] - joltages[i]) : maxPressesPerButton[j];
+					}
+				}
 			}
 
 			public MachineState PressButton(int b)
@@ -182,8 +191,12 @@ namespace AdventofCode2025
 					int d = machine.joltages[i] - joltages[i];
 					if (d < 0)
 						return -1;
+
 					total += d;
 				}
+
+				if (maxPressesPerButton.Max() < 1 && total > 0)
+					return -1;
 
 				return total;
 			}
@@ -191,7 +204,27 @@ namespace AdventofCode2025
 			public override string ToString()
 			{
 				//return string.Join("", buttonPressesToHere.Select(b => b==1 ? "#" : ".")) + ":" + EstLightDistance();
-				return joltages.Sum() + " => " + EstJoltDistance();
+				return joltages.Sum() + " + " + EstJoltDistance() + " | " + maxPressesPerButton.Sum();
+			}
+
+			public bool CanStillSucceed()
+			{
+				for (var i = 0; i < machine.joltages.Length; i++)
+				{
+					//int max = maxPressesPerButton.Where((m,n) => machine.buttons[n].wiring.Contains(i)).Sum();
+					int max = 0;
+					for (int n = 0; n < maxPressesPerButton.Length; n++)
+					{
+						max += machine.buttons[n].wiring.Contains(i) ? maxPressesPerButton[n] : 0;
+					}
+
+					if (machine.joltages[i] - joltages[i] > max)
+					{
+						return false;
+					}
+				}
+
+				return true;
 			}
 		}
 
@@ -228,25 +261,20 @@ namespace AdventofCode2025
 				MachineState cState = openStates[0];
 				openStates.RemoveAt(0);
 
-				for (int b = 0; b < cState.buttonPressesToHere.Length; b++)
-				{
-					if(cState.buttonPressesToHere[b] == 1) continue;
+				if(cState.Powered()) return cState.buttonPressesToHere.Sum();
 
+				Parallel.For(0, cState.buttonPressesToHere.Length, b=>
+				{
 					MachineState nState = cState.PressButton(b);
 
-					if (nState.Matches())
-					{
-						return nState.buttonPressesToHere.Count(p => p == 1);
-					}
-					else
-					{
-						openStates.Add(nState);
-					}
-				}
+					openStates.Add(nState);
+				});
 			}
 
 			return int.MaxValue;
 		}
+
+		private static int tests = 0;
 
 		internal static long Part2(string input)
 		{
@@ -261,8 +289,9 @@ namespace AdventofCode2025
 			int n = 1;
 			foreach (Machine m in machines)
 			{
+				tests = 0;
 				long r = GetFewestJolts(m);
-				Console.WriteLine($"{n++}/{lines.Length} => {r}");
+				Console.WriteLine($"{n++}/{lines.Length} => {r} ({tests})");
 				result += r;
 			}
 
@@ -280,21 +309,36 @@ namespace AdventofCode2025
 				MachineState cState = openStates[0];
 				openStates.RemoveAt(0);
 
-				for (int b = 0; b < cState.buttonPressesToHere.Length; b++)
+				if (cState.Powered())
 				{
-					MachineState nState = cState.Jolt(b);
+					return cState.buttonPressesToHere.Sum();
+				}
 
-					if (nState.Powered())
+				cState.EstJoltDistance();
+
+				for(int b = 0; b < cState.buttonPressesToHere.Length; b++)
+				{
+					for(int a = 0; a < Math.Max(cState.maxPressesPerButton[b] / 3, 1); a++)
 					{
-						return nState.buttonPressesToHere.Sum();
-					}
-					else if (nState.EstJoltDistance() > 0)
-					{
-						openStates.Add(nState);
+						if (cState.maxPressesPerButton[b] <= 0)
+						{
+							continue;
+						}
+						MachineState nState = cState.Jolt(b);
+
+						if (nState.EstJoltDistance() > 0 && nState.CanStillSucceed())
+						{
+							openStates.Add(nState);
+							nState.EstJoltDistance();
+						}
 					}
 				}
 				openStates.Sort((a,b) => a.EstJoltDistance().CompareTo(b.EstJoltDistance()));
-				Console.WriteLine($"...{openStates.Count} / {openStates[0].EstJoltDistance()}");
+				if(openStates.Any())
+					Console.WriteLine($"...{openStates.Count} / {openStates[0].EstJoltDistance()}");
+				else
+					Console.WriteLine($"...{openStates.Count} / ---");
+				tests++;
 			}
 
 			return int.MaxValue;

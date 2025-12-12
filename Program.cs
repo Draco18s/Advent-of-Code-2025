@@ -18,7 +18,7 @@ namespace AdventofCode2025 {
 		private const string leaderboardURI = "{0}/leaderboard/private/view/{1}.json";
 		private static Dictionary<string,List<string>> conf;
 		
-		private static string puzzleNum = "11";
+		private static string puzzleNum = "12";
 
 		static void Main(string[] args) {
 			/*** DAY 1 IMPORTANT NOTE: DO THIS BEFORE STARTING ***/
@@ -48,7 +48,7 @@ namespace AdventofCode2025 {
 			conf = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,List<string>>>(confj);
 			#endregion
 			#region puzzle input
-			string p = Path.GetFullPath(string.Format("./../../../inputs/day{0}.txt", puzzleNum));
+			string p = Path.GetFullPath($"./../../../inputs/day{puzzleNum}.txt");
 			if(!File.Exists(p)) {
 				Task.Run(async () => {
 
@@ -299,6 +299,15 @@ namespace AdventofCode2025 {
 						if((x.completion_day_level[day][part].dateTime - start).TotalHours > MAX_EXPECTED)
 						{
 							DateTime s = (x.completion_day_level[day][part].dateTime - averageTime);
+							if (x.name == "Draco18s")
+							{
+								string path = Path.GetFullPath($"./../../../inputs/day{day}.txt");
+								DateTime info = File.GetCreationTime(path);
+								if (info < s)
+								{
+									s = new DateTime(info.Year, info.Month, info.Day, info.Hour, info.Minute, info.Second);
+								}
+							}
 							int extra = s.Minute % 5;
 							s = s.AddMinutes(-extra);
 							xDur = x.completion_day_level[day][part].dateTime - s;
@@ -310,6 +319,15 @@ namespace AdventofCode2025 {
 						if ((y.completion_day_level[day][part].dateTime - start).TotalHours > MAX_EXPECTED)
 						{
 							DateTime s = (y.completion_day_level[day][part].dateTime - averageTime);
+							if (y.name == "Draco18s")
+							{
+								string path = Path.GetFullPath($"./../../../inputs/day{day}.txt");
+								DateTime info = File.GetCreationTime(path);
+								if (info < s)
+								{
+									s = new DateTime(info.Year, info.Month, info.Day, info.Hour, info.Minute, info.Second);
+								}
+							}
 							int extra = s.Minute % 5;
 							s = s.AddMinutes(-extra);
 							yDur = y.completion_day_level[day][part].dateTime - s;
@@ -354,6 +372,15 @@ namespace AdventofCode2025 {
 					if ((user.completion_day_level[day][part].dateTime - start).TotalHours > MAX_EXPECTED)
 					{
 						DateTime s = (user.completion_day_level[day][part].dateTime - averageTime);
+						if (user.name == "Draco18s")
+						{
+							string path = Path.GetFullPath($"./../../../inputs/day{day}.txt");
+							DateTime info = File.GetCreationTime(path);
+							if (info < s)
+							{
+								s = new DateTime(info.Year, info.Month, info.Day, info.Hour, info.Minute, info.Second);
+							}
+						}
 						int extra = s.Minute % 5;
 						s = s.AddMinutes(-extra);
 						yDur = user.completion_day_level[day][part].dateTime - s;

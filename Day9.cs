@@ -47,8 +47,6 @@ namespace AdventofCode2025
 				if (redTiles.Count > 0)
 				{
 					redTiles.Add(Vector2.Parse(line));
-
-					
 				}
 				else
 				{
@@ -61,20 +59,15 @@ namespace AdventofCode2025
 
 			foreach (int x in allX.ToArray())
 			{
-				if (!allX.Contains(x + 1) && allX.Contains(x + 2))
-				{
-					allX.Add(x+1);
-				}
+				allX.Add(x + 1);
 			}
 			foreach (int y in allY.ToArray())
 			{
-				if (!allY.Contains(y + 1) && allY.Contains(y + 2))
-				{
-					allY.Add(y + 1);
-				}
+				allY.Add(y + 1);
 			}
-			allX.Sort();
-			allY.Sort();
+			allX = allX.Distinct().OrderBy(x => x).ToList();
+			allY = allY.Distinct().OrderBy(x => x).ToList();
+			//allY.Sort();
 
 			/*Dictionary<int, int> tileToMapX = redTiles.Select(t => t.x).Distinct().ToDictionary(t => t, t => allX.IndexOf(t));
 			Dictionary<int, int> mapToTileX = tileToMapX.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
@@ -134,6 +127,7 @@ namespace AdventofCode2025
 			//Console.WriteLine(g);
 
 			(Vector2 a, Vector2 b) best = (Vector2.ZERO, Vector2.ZERO);
+			(Vector2 a, Vector2 b) ndbest = (Vector2.ZERO, Vector2.ZERO);
 
 			Vector2[] map = mapToTile.Keys.ToArray();
 			for (int i = 0; i < map.Length; i++)
@@ -158,12 +152,14 @@ namespace AdventofCode2025
 
 					if (Validate(rect, g))
 					{
+						ndbest = best;
 						result = area;
 						best = (t1, t2);
 					}
 				}
 			}
 			Console.WriteLine($"{best.a}-{best.b}");
+			Console.WriteLine($"{ndbest.a}-{ndbest.b} @ {(Math.Abs(ndbest.a.x - ndbest.b.x) + 1) * (Math.Abs(ndbest.a.y - ndbest.b.y) + 1)}");
 			g[tileToMap[best.a]] = 'A';
 			g[tileToMap[best.b]] = 'B';
 
